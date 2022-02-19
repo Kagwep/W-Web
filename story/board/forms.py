@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 class SingUPForm(UserCreationForm):
     class Meta:
         model = UserReg
-        fields = ['first_name','last_name','email','phone_number','password1','password2']
+        fields = ['username','first_name','last_name','email','phone_number','password1','password2']
 
 class MystoryForm(ModelForm):
     class Meta:

@@ -33,17 +33,19 @@
         <div>
             {% for mystory in mystorys %}
     
-            
+            <h4> {{mystory.host.first_name}} {{mystory.host.last_name}}</h4>
     
             <div> 
                 {% if request.user == mystory.host %}
                 <a href="{% url 'update-room' mystory.id %}"> Edit </a>
                 <a href="{% url 'delete-room' mystory.id %}"> Delete </a>
                 {% endif %}
-                <span> @{{mystory.host.username}}</span>
+                <h4><span> @{{mystory.host.username}}</span></h4>
                 
-                <h5>{{mystorys.id}} -- <a href="{% url 'mystory' mystory.id %}"> {{mystory.name}} </a></h5>
-                <small> {{mystory.topic.name}}</small>
+                <h5>{{mystorys.id}} -- <a href="{% url 'mystory' mystory.id %}"> {{mystory.title}} </a></h5>
+              
+                <small> {{mystory.topic.title}}</small>
+                
                 
                 <hr/>
             </div>

@@ -6,9 +6,11 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class UserRegManager(BaseUserManager):
-    def create_user(self,email,first_name,last_name,phone_number,password=None ):
+    def create_user(self,email,username,first_name,last_name,phone_number,password=None ):
         if not email:
             return ValueError('please enter your email')
+        if not username:
+            return ValueError('please enter your username max of six characters')
         if not first_name:
             return ValueError('please enter your first_name')
         if not last_name:
@@ -19,6 +21,7 @@ class UserRegManager(BaseUserManager):
 
         user = self.model(
             email = self.normalize_email(email),
+            username = username,
             first_name =first_name,
             last_name = last_name,
             phone_number = phone_number
@@ -28,9 +31,10 @@ class UserRegManager(BaseUserManager):
         user.set_password(password)
         user.save(using =self._db)
         return user
-    def create_superuser(self,email,first_name,last_name,phone_number,password=None ):
+    def create_superuser(self,email,username,first_name,last_name,phone_number,password=None ):
         user = self.create_user(
             email = self.normalize_email(email),
+            username= username,
             first_name= first_name,
             last_name= last_name,
             phone_number= phone_number,
@@ -45,6 +49,7 @@ class UserRegManager(BaseUserManager):
         return user
 
 class UserReg(AbstractBaseUser,PermissionsMixin):
+    username = models.CharField(max_length=6, verbose_name='enter username')
     first_name = models.CharField(verbose_name='enter your first name', null= False, max_length=100)
     last_name = models.CharField(verbose_name='enter your last name', null= False, max_length=100)
     phone_number = models.CharField(verbose_name='enter valid phone number', null= False, max_length=100)
@@ -52,7 +57,7 @@ class UserReg(AbstractBaseUser,PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-    REQUIRED_FIELDS = ['first_name','last_name','phone_number']
+    REQUIRED_FIELDS = ['username','first_name','last_name','phone_number']
 
     objects = UserRegManager()
    
@@ -72,16 +77,31 @@ class UserReg(AbstractBaseUser,PermissionsMixin):
 
 
 class Topic(models.Model):
-    name = models.CharField(max_length= 200)
+    CH = (
+        ('True story','True Story'),
+        ('Romance','Romance'),
+        ('Short Story','Short Story'),
+        ('Childrens story','Childrens story'),
+        ('Fantasy','Fantasy'),
+        ('Horror','Horror')
+    )
+    name = models.CharField(max_length= 200, verbose_name= 'topic', choices=CH)
 
     def __str__(self):
         return self.name
 
 class Mystory(models.Model):
     host = models.ForeignKey(UserReg,  on_delete= models.CASCADE , null= True)
-    topic = models. ForeignKey(Topic, on_delete= models.SET_NULL, null = True)
-
-    name = models.CharField(max_length= 200)
+    CH = (
+        ('True story','True Story'),
+        ('Romance','Romance'),
+        ('Short Story','Short Story'),
+        ('Childrens story','Childrens story'),
+        ('Fantasy','Fantasy'),
+        ('Horror','Horror')
+    )
+    topic = models.CharField(max_length= 200, verbose_name= 'topic', choices=CH)
+    title = models.CharField(max_length= 200)
     description = models.TextField(null=True, blank =True)
     body = models.TextField() 
     updated = models.DateTimeField(auto_now =True)
@@ -91,7 +111,7 @@ class Mystory(models.Model):
         ordering = ['-updated', '-created']
 
     def __str__(self):
-        return self.name
+        return self.title
 
 class Comment(models.Model):
     user = models.ForeignKey(UserReg, on_delete= models.CASCADE)
