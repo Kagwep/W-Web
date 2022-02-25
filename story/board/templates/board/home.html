@@ -11,35 +11,35 @@
 
 
 <div class="home-container"> 
-    <div class="sidebar">
-        <h3> Browse Topics</h3>
+    <div class="m-2 mx-5 bg-white">
+        <h3 class="bg-primary rounded-3 text-light px-2"> Browse Stories</h3>
         <hr>
         <div>
-            <a href="{% url 'home'%}">All</a>
+            <a class="p-2"  href="{% url 'home'%}">All</a>
         </div>
         {% for topic in topics %}
 
             <div>
-                <a href="{% url 'home'%}?q={{topic.name}}">{{topic.name}}</a>
+                <a class="p-2" chref="{% url 'home'%}?q={{topic.name}}">{{topic.name}}</a>
             </div>
 
         {% endfor %}
 
     </div>
 
-    <div>
-        <h5> {{mystorys_count}} mystory available</h5>
-        <a href="{% url 'create-room'    %}"> Tell Story </a>
-        <div>
+    <div class="m-2 mx-5 bg-white">
+        <h5 class="bg-primary rounded-3 text-light px-2"> {{mystorys_count}} mystory available</h5>
+        <a class="p-2" href="{% url 'create-room'    %}"> Create new story </a>
+        <div class="m-5">
             {% for mystory in mystorys %}
     
-            <h4> {{mystory.host.first_name}} {{mystory.host.last_name}}</h4>
     
             <div> 
                 {% if request.user == mystory.host %}
-                <a href="{% url 'update-room' mystory.id %}"> Edit </a>
-                <a href="{% url 'delete-room' mystory.id %}"> Delete </a>
+                <a class="link-primary m-2  fs-5" href="{% url 'update-room' mystory.id %}"> Edit </a>
+                <a class="link-primary m-2  fs-5" href="{% url 'delete-room' mystory.id %}"> Delete </a>
                 {% endif %}
+                <h4> {{mystory.host.first_name}} {{mystory.host.last_name}}</h4>
                 <h4><span> @{{mystory.host.username}}</span></h4>
                 
                 <h5>{{mystorys.id}} -- <a href="{% url 'mystory' mystory.id %}"> {{mystory.title}} </a></h5>
