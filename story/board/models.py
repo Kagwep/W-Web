@@ -117,7 +117,7 @@ class Mystory(models.Model):
         return self.title
 
 class Comment(models.Model):
-    user = models.ForeignKey(UserReg, on_delete= models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
     mystory = models.ForeignKey(Mystory, on_delete= models.CASCADE)
     body = models.TextField() 
     updated = models.DateTimeField(auto_now =True)

@@ -86,7 +86,7 @@ def home(request):
 def MyStory(request,pk):
 
     mystory = Mystory.objects.get(id = pk)
-    mystory_comments = mystory.message_set.all().order_by('-created') 
+    mystory_comments = mystory.comment_set.all().order_by('-created') 
     participants = mystory.participants.all()
 
     if request.method == "POST":

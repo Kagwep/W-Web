@@ -22,14 +22,15 @@
         <p>{{mystory.description}}</p>
         <p>{{mystory.body}}</p>
         <div class="comment-wrapper">
-            <h3> conversation </h3>
+            
             <hr>
-
+            <h3> Comments </h3>
             {% for comment in mystory_comments %}
 
+            <h3> Comments </h3>
                 <div>
                     {% if request.user == comment.user%}
-
+                    
                     <a href="{% url 'delete' message.id %}"> Delete</a>
 
                     {% endif %}
