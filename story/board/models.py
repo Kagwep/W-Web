@@ -1,9 +1,11 @@
 import email
 from django.db import models
-
+from django.db.models.deletion import CASCADE, SET_NULL
 # Create your models here.
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+from story.settings import AUTH_USER_MODEL
+from django.conf import settings
 
 class UserRegManager(BaseUserManager):
     def create_user(self,email,username,first_name,last_name,phone_number,password=None ):
@@ -102,6 +104,7 @@ class Mystory(models.Model):
     )
     topic = models.CharField(max_length= 200, verbose_name= 'topic', choices=CH)
     title = models.CharField(max_length= 200)
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='participants', blank= True)
     description = models.TextField(null=True, blank =True)
     body = models.TextField() 
     updated = models.DateTimeField(auto_now =True)

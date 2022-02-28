@@ -86,9 +86,8 @@ def home(request):
 def MyStory(request,pk):
 
     mystory = Mystory.objects.get(id = pk)
-    print(mystory)
-   # mystory_messages = mystory.message_set.all().order_by('-created') , 'mystory_messages': mystory_messages
- #participants = mystory.participants.all()
+    mystory_comments = mystory.message_set.all().order_by('-created') 
+    participants = mystory.participants.all()
 
     if request.method == "POST":
         message = Comment.objects.create(
@@ -96,9 +95,9 @@ def MyStory(request,pk):
             mystory = mystory,
             body = request.POST.get('body')
         )
-       # mystory.participants.add(request.user)
+        mystory.participants.add(request.user)
         return redirect('mystory', pk=mystory.id)
-    context = {'mystory': mystory }
+    context = {'mystory': mystory , 'mystory_messages': mystory_comments, 'participants':participants}
 
     return render(request, 'board/MyStorys.html', context)
 @login_required(login_url= 'login')

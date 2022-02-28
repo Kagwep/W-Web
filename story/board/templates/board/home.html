@@ -39,12 +39,11 @@
                 <a class="link-primary m-2  fs-5" href="{% url 'update-room' mystory.id %}"> Edit </a>
                 <a class="link-primary m-2  fs-5" href="{% url 'delete-room' mystory.id %}"> Delete </a>
                 {% endif %}
-                <h4> {{mystory.host.first_name}} {{mystory.host.last_name}}</h4>
-                <h4><span> @{{mystory.host.username}}</span></h4>
+                <h6><span> @{{mystory.host.username}}</span></h6>
                 
                 <h5>{{mystorys.id}} -- <a href="{% url 'mystory' mystory.id %}"> {{mystory.title}} </a></h5>
               
-                <small> {{mystory.topic.title}}</small>
+                <small> {{mystory.description}}</small>
                 
                 
                 <hr/>
