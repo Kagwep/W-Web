@@ -1,9 +1,10 @@
+from tkinter import N
 from django.shortcuts import render
 
 # Create your views here.
 import email
 from django.shortcuts import render, redirect
-from .forms import MystoryForm, SingUPForm
+from .forms import MystoryForm, SingUPForm,seriesForm,episodeForm,genreForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -16,7 +17,7 @@ from .decorators import un_authenticated,allowed_users
 
 # Create your views here.
 
-from .models import Comment, Mystory, UserReg,Topic
+from .models import Comment, Episode, Mystory, Series, UserReg,Topic,Genre
 
 @un_authenticated
 def LoginPage(request):
@@ -71,9 +72,10 @@ def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ""
 
     mystorys = Mystory.objects.filter(
-        Q(topic__icontains = q) |
+        Q(topic__name__icontains = q) |
         Q(title__icontains = q) |
         Q(description__icontains = q)|
+        Q(created__icontains = q)|
         Q(body__icontains = q)
         
         )
@@ -155,4 +157,94 @@ def deleteMessage(request, pk):
         message.delete()
         return redirect('home')
     return render(request, 'board/delete.html', {'obj': message} )
+
+def createSeries(request):
+    if request.method == 'POST':
+        seriesInfo = request.POST
+        name_check='none'
+
+        if seriesInfo['category'] != name_check:
+            name = Topic.objects.get(id=seriesInfo['category'])
+        elif seriesInfo['category_new'] != ' ':
+            name,created = Topic.objects.get_or_create(
+                name = seriesInfo['category_new']
+            )
+        else:
+            name=None
+
+        series = Series.objects.create(
+            author = request.user,
+            series_name = seriesInfo['series_name'],
+            category = name
+        )
+        return redirect('episode')
+                
+    return render(request, 'read-series.html')
+
+def updateSeries(request,pk):
+    series = Series.objects.get(id=pk) 
+    form = seriesForm(instance=series)
+    if request.user != series.author:
+        return HttpResponse('Invalid request')
+    if request.method == 'POST':
+        form = seriesForm(request.POST, instance=series)
+        if form.is_valid():
+            form.save()
+            return redirect('read-series')
+    context = {"form":form}
+
+    return redirect(request, 'read-series.html', context)
+
+
+def deleteSeries(request,pk):
+    series = Series.objects.get(id=pk)
     
+    if request.user != series.author:
+        return HttpResponse('Request Denied')
+    if request.method == 'POST':
+        series.delete()
+
+        return redirect('read-series')
+    return redirect(request, 'delete.html',{'obj':series})
+
+def createEpisode(request,pk):
+    series = Series.objects.get(id=pk)
+    q = request.GET.get('q') if request.GET.get('q') != None else ""
+    if request.method == 'POST':
+        episode = request.POST
+        name_check = 'none'
+        if episode['episode_category'] != name_check:
+            name = Genre.objects.get(id=episode['episode_category'])
+        elif episode['episode_category_new'] != ' ':
+            name,create = Topic.objects.get_or_create(
+                name = episode['episode_category_new']
+            )
+        else:
+            name = None
+        
+
+        eps = Episode.objects.create(
+            publisher = request.user,
+            series = series,
+            topic = name,
+            title = episode['title'],
+            short_description = episode['short_descrition'],
+            episode_body = episode['episode']
+
+        )
+
+        return redirect("episodes",series.id)
+    episodes = Episode.objects.filter(
+        Q(series__series_name__icontains = q)|
+        Q(topic__name__icontains = q)|
+        Q(title__icontains = q)|
+        Q(short_descritpion__icontains = q)|
+        Q(episode_body__icontains = q)|
+        Q(updated__icontains = q)|
+        Q(created__icontains = q)
+    )
+    episode_count = episodes.count()
+
+    context = {"series":series,"episodes":episodes,"episode_count":episode_count}
+
+    return redirect(request, "episodes.html", context)

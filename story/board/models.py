@@ -1,4 +1,6 @@
+from distutils.command import upload
 import email
+from unicodedata import category
 from django.db import models
 from django.db.models.deletion import CASCADE, SET_NULL
 # Create your models here.
@@ -6,6 +8,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 from story.settings import AUTH_USER_MODEL
 from django.conf import settings
+from ckeditor.fields import RichTextField
 
 class UserRegManager(BaseUserManager):
     def create_user(self,email,username,first_name,last_name,phone_number,password=None ):
@@ -91,23 +94,21 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.name
+        
+class Genre(models.Model):
+    henr = (("Series",'Series'),("episodes","episodes"))
+    name_genre = models.CharField(max_length=200,choices=henr)
+    def __str__(self):
+        return self.name_genre
+
 
 class Mystory(models.Model):
     host = models.ForeignKey(UserReg,  on_delete= models.CASCADE , null= True)
-    CH = (
-        ('True story','True Story'),
-        ('Romance','Romance'),
-        ('Short Story','Short Story'),
-        ('Childrens story','Childrens story'),
-        ('Fantasy','Fantasy'),
-        ('Horror','Horror')
-    )
-    topic = models.CharField(max_length= 200, verbose_name= 'topic', choices=CH)
+    topic = models.ForeignKey(Topic,on_delete= models.CASCADE, null=True)
     title = models.CharField(max_length= 200)
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='participants', blank= True)
     description = models.TextField(null=True, blank =True)
-    body = models.TextField() 
-    
+    body = RichTextField()
     updated = models.DateTimeField(auto_now =True)
     created = models.DateTimeField(auto_now_add = True)
 
@@ -116,6 +117,30 @@ class Mystory(models.Model):
 
     def __str__(self):
         return self.title
+
+class Series(models.Model):
+    author = models.ForeignKey(UserReg,on_delete=models.CASCADE,null=True)
+    series_name = models.CharField(max_length=200,verbose_name="Enter series name")
+    category = models.ForeignKey(Topic,on_delete=models.CASCADE,null=True)
+
+    def __str__(self):
+        return self.series_name
+
+class Episode(models.Model):
+    publisher = models.ForeignKey(UserReg,on_delete=models.CASCADE,null=True)
+    series = models.ForeignKey(Series,on_delete=models.CASCADE,null=False)
+    topic = models.ForeignKey(Topic,on_delete=models.CASCADE,null=True)
+    title = models.CharField(max_length=200,verbose_name="Title",null=False)
+    short_description = models.TextField()
+    episode_body = RichTextField()
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+
 
 class Comment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
