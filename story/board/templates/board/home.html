@@ -6,63 +6,113 @@
     .home-container{
         display: grid;
         grid-template-columns: 1fr 3fr 1fr;
+        justify-content: center;
     }
-</style>
+    @media screen and (max-width: 1000px) {
+      .home-container {
+        position: relative;
+        width: auto;
+        bottom: 0; 
+        margin-left: 10px;
+        display: block;
 
+      } 
+
+      
+    }
+    .card-body{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: auto;
+        grid-gap: 2rem;
+        margin: 5px;
+        
+    }
+    @media screen and (max-width: 1000px) {
+      .card-body {
+        position: relative;
+        width: auto;
+        bottom: 0; 
+        margin-left: 10px;
+        display: block;
+      } 
+      .card-body .card{
+        margin: 20px;
+      }
+    }
+
+</style>
+<section></section>
 
 <div class="home-container"> 
+    
     <div class="m-2 mx-5 bg-white">
-        <h3 class="bg-primary rounded-3 text-light px-2"> Browse Stories</h3>
-        <hr>
-        <div>
-            <a class="p-2"  href="{% url 'home'%}">All</a>
+        <div class="sides">
+            <h6 class="text-white bg-primary fw-bold font-italic m-0 p-2 px-2" > Stories </h6>
+            <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white  rounded-3 p-3 mb-4 ">
+                <div class="position-sticky">
+                    <div class="list-group list-group-flush mx-3 mt-4 ">
+                    <a href="{% url 'home'%}" class="list-group-item list-group-item-action py-2 bg-light text-dark ripple active">
+                        <i class="fas fa-chart-area fa-fw me-3"></i><span> All </span>
+                    </a>
+                    {% for topic in topics %}
+                    <a href="{% url 'home'%}?q={{category.name}}" class="list-group-item list-group-item-action py-2 ripple"
+                        ><i class="fas fa-lock fa-fw me-3"></i><span>{{topic.name}}</span></a
+                    >
+                    {% endfor %}
+                    </div>
+                </div>
+                </nav>
         </div>
-        {% for topic in topics %}
+       
+                  <!-- Sidebar -->
 
-            <div>
-                <a class="p-2" chref="{% url 'home'%}?q={{topic.name}}">{{topic.name}}</a>
-            </div>
-
-        {% endfor %}
 
     </div>
     <div class="card">
-        <div class="card-header bg-primary text-white">
-            {{mystorys_count}} mystory available
-        </div>
+        <div class="row">
+            <div class="col">
+              <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+                <form method="get" action="{%url 'home'%}">
+                  <input type="text" name = "q" class="form-control rounded-3  " placeholder="search" aria-label="Recipient's username" aria-describedby="basic-addon2">
+              </form>
+              <h5 class="bg-primary text-white rounded-3 text-dark px-2 py-2 d-flex justify-content-center ">{{mystorys_count}} mystory(s) available</h5>
+              </nav>
+            </div>
+          </div>
         <div class="card-body">
-            {% for mystory in mystorys %}
-                <div class="card text-center m-2">
+            {% for mystory in mystorys %} 
+                <div class="card text-center ">
                     <div class="card-header">
-                        <h5 class="card-title">{{mystorys.id}} -- <a href="{% url 'mystory' mystory.id %}"> {{mystory.title}} </a></h5>
                         <h6 class="card-title"><span> @{{mystory.host.username}}</span></h6>
+                        <h5 class="card-title"><a href="{% url 'mystory' mystory.id %}"> {{mystory.title}} </a></h5>
+    
                     </div>
-                    <div class="card-body">
-                        <p class="card-text">{{mystory.description}}.</p>
-                    <a href="{% url 'mystory' mystory.id %}" class="btn btn-primary">Read ...</a>
+                    <div class="card-header bg-white">
+                        <img class="img-fluid" src="#" style="height: 100px; " alt="The List"> 
+                    </div>
+                    
+                    <div class="card-bodys">
+                        <p class="card-text">{{mystory.description}}</p>                       
                     </div>
                     <div class="card-footer text-muted ">
-                        <a href="#" class="text-decoration-none p-5">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
-                                <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2.144 2.144 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a9.84 9.84 0 0 0-.443.05 9.365 9.365 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111L8.864.046zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a8.908 8.908 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.224 2.224 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.866.866 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>
-                              </svg>
-                              likes
-                        </a>
-                        {% if request.user == mystory.host %}
-                        <a class="link-primary m-2 " href="{% url 'update-room' mystory.id %}"> Edit </a>
-                        <a class="link-primary m-2 " href="{% url 'delete-room' mystory.id %}"> Delete </a>
+                        <a href="{% url 'mystory' mystory.id %}" class="btn btn-warning"> Read ...</a>
+                        {% if request.user == product.host %}
+                        <a class="link-primary m-2 " href="{% url 'update-room' product.id %}"> Edit </a>
+                        <a class="link-primary m-2 " href="{% url 'delete-room' product.id %}"> Delete </a>
                         {% endif %}
-                            <a href="#" class="text-decoration-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
-                                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
-                                </svg>
-                                reads
-                            </a>
                     </div>
                 </div>
+
             {% endfor %}
         </div>
-      </div>
+    </div>
+    <div class="board-trend">
+        <div class="m-2">
+            <h6 class="text-white bg-primary fw-bold font-italic m-0 p-2 px-2" > Trending  </h6>
+        </div>
+        
+    </div>
 
 </div>
 <div class="container">

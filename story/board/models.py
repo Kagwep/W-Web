@@ -107,6 +107,7 @@ class Mystory(models.Model):
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='participants', blank= True)
     description = models.TextField(null=True, blank =True)
     body = models.TextField() 
+    
     updated = models.DateTimeField(auto_now =True)
     created = models.DateTimeField(auto_now_add = True)
 

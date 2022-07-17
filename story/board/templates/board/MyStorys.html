@@ -4,64 +4,80 @@
 
 <style>
     .mystory-container{
-        display: grid;
-        grid-template-columns:3fr 1fr;
+
+    }
+    .comment-wrapper{
+        width: 100px;
     }
 </style>
+<section>
+    <div class="mystory-container">
 
-<div class="mystory-container">
-
-
-
-    <div>
-
-        <h1> {{mystory.name}}
-
-        </h1>
-        <p>{{mystory.title}}</p>
-        <p>{{mystory.description}}</p>
-        <p>{{mystory.body}}</p>
-        <div class="comment-wrapper">
-            
-            <hr>
-            <h3> Comments </h3>
-            {% for comment in mystory_comments %}
-
-            <h3> Comments </h3>
-                <div>
-                    {% if request.user == comment.user%}
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-header text-center">                   
+                        <h1> {{mystory.name}}</h1>
+                        <p>{{mystory.title}}</p>
+                    </div>
+                    <div class="m-2">
+                        <p>{{mystory.body}}</p> 
+                    </div>
                     
-                    <a href="{% url 'delete' message.id %}"> Delete</a>
-
-                    {% endif %}
-                    <small>@{{comment.user}} {{comment.created|timesince}} ago </small>
-                    <p>{{comment.body}}</p>
-                    <hr>
-
                 </div>
 
-            {% endfor %}
-
-
-        </div >
-
-
-        {% if request.user.is_authenticated %}
-            <div class= "comment-form">
-
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <input type="text" name="body" placeholder="Message ...">
-                </form>
+  
+            </div>
+            <div class="card">
+                <div class="card-bodys">
+                    <div class="card-header">
+                        <h3> Comments </h3>
+                    </div>
+                    <div class="comment-wrapper">
+                        
+                        {% for comment in mystory_comments %}
+            
+                        <h3> Comments </h3>
+                            <div>
+                                {% if request.user == comment.user%}
+                                
+                                <a href="{% url 'delete' message.id %}"> Delete</a>
+            
+                                {% endif %}
+                                <small>@{{comment.user}} {{comment.created|timesince}} ago </small>
+                                <p>{{comment.body}}</p>
+                                <hr>
+            
+                            </div>
+            
+                        {% endfor %}
+            
+            
+                    </div >
+            
+            
+                    {% if request.user.is_authenticated %}
+                        <div class= "comment-form m-2" >
+            
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type="text" name = "body" class="rounded-3 " style="width: 300px; height: 100px;" placeholder="search" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            </form>
+            
+                        </div>
+            
+            
+                    {% endif %}
+                </div>
 
             </div>
 
+    
 
-        {% endif %}
-
+        </div>
+        
     </div>
+</section>
 
-
-</div>
 
 {% endblock %}
