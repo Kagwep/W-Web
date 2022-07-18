@@ -248,3 +248,25 @@ def createEpisode(request,pk):
     context = {"series":series,"episodes":episodes,"episode_count":episode_count}
 
     return redirect(request, "episodes.html", context)
+
+def updateEpisode(request,pk):
+    episode = Episode.objects.get(id=pk)
+    form = episodeForm(instance=episode) 
+    if request.user != episode.publisher:
+        return HttpResponse('Invalid request')
+    if request.method == 'POST':
+        form = episodeForm(request.POST, instance=episode)
+        if form.is_valid():
+            form.save()
+            return redirect('episodes')
+    context = {'form':form}
+    return redirect(request, 'episodes.html',context)
+def deleteEpisode(request,pk):
+    episode = Episode.objects.get(id=pk)
+
+    if request.user != episode.publisher:
+        return HttpResponse('Request denied')
+    if request.method == 'POST':
+        episode.delete()
+        return redirect('episodes')
+    return redirect(request, 'episodes.html', {'obj':episode})
