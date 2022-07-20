@@ -1,14 +1,67 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<section class="bg-secondary">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card m-2">
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        <!-- Name input -->
+                        {% csrf_token %}
+    
+                        <div class="form-group m-3">
+                            <label> Title </label>
+                            <input  name="title" type="text" class="form-control" placeholder="title">
+                        </div>
 
-<div>
-    <form method = "POST" action="">
-        {% csrf_token %}
-        {{form.as_p}}
+                        <div class="form-group m-3">
+                            <label> select a category </label>
+    
+                            <select name="topic" class="form-control" id="">
+                                <option value="none"> select a category ... </option>
+                                {% for category in categories %}
+                                <option value="{{category.id}}"> {{category.name}}</option>
+                                {% endfor %}
+    
+                            </select>   
+                        </div>
+    
+    
+                        <div class="form-group m-3">
+                            <label> create new category </label>
+                            <input  name="topic_new" type="text" class="form-control" placeholder=" create a new category">
+                            
+                        </div>
+                        <div class="form-group m-3">
+                            <label> description </label>
+                            <textarea class="form-control"  required name="description" id="desc" rows="4"></textarea>
+                        </div>
+    
+                        <div class="form-group m-3">
+                            <label> body </label>
+                            <textarea  name="body" placeholder="....." class="form-control" rows="12" cols="50"></textarea>
+    
+                        </div>
+                        <!-- Checkbox -->
+                        <div class="form-check d-flex justify-content-center mb-4">
+                          <input class="form-check-input me-2" type="checkbox" value="" id="form4Example4" checked />
+                          <label class="form-check-label" for="form4Example4">
+                            Send me a copy of this message
+                          </label>
+                        </div>
+                      
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary m-3"> Submit</button>
+                      </form>
+                </div>
 
-        <input type="submit" value="Submit"/>
-    </form>
-</div>
-
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('body');
+</script>
 {% endblock content %}

@@ -11,8 +11,8 @@
                         {% csrf_token %}
     
                         <div class="form-group m-3">
-                            <label> Product Name </label>
-                            <input required name="product_name" type="text" class="form-control" placeholder=" Enter product name">
+                            <label> series Name </label>
+                            <input required name="series_name" type="text" class="form-control" placeholder=" Enter product name">
     
                         </div>
     
@@ -20,7 +20,7 @@
                         <div class="form-group m-3">
                             <label> select a category </label>
     
-                            <select name="product_category" class="form-control" id="">
+                            <select name="ategory" class="form-control" id="">
                                 <option value="none"> select a category ... </option>
                                 {% for category in categories %}
                                 <option value="{{category.id}}"> {{category.name}}</option>
@@ -32,24 +32,7 @@
     
                         <div class="form-group m-3">
                             <label> create new category </label>
-                            <input  name="product_category_new" type="text" class="form-control" placeholder=" create a new category">
-                            
-                        </div>
-    
-                        <div class="form-group m-3">
-                            <label> Product description </label>
-                            <textarea  required name="product_description" id="" cols="30" rows="10"></textarea>
-                        </div>
-    
-                        <div class="form-group m-3">
-                            <label> Price </label>
-                            <input required name="price" type="text" class="form-control" placeholder=" create a new category">
-    
-                        </div>
-    
-                        <div class="form-group m-3">
-                            <label> Upload Display Image </label>
-                            <input required name="image" type="file" class="form-control-file" placeholder=" Upload image">
+                            <input  name="category_new" type="text" class="form-control" placeholder=" create a new category">
                             
                         </div>
     

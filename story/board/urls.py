@@ -10,9 +10,16 @@ urlpatterns = [
 
     path('mystory/<str:pk>/', views.MyStory, name = "mystory"),
 
-    path ('create-room', views.createRoom, name= 'create-room'),
-    path ('update-room/ <str:pk>/ ', views.updateRoom, name= 'update-room'),
-    path ('delete-room/ <str:pk>/ ', views.deleteRoom, name= 'delete-room'),
-    path ('delete-message/ <str:pk>/ ', views.deleteMessage, name= 'delete-message')
+    path ('create-story', views.createStory, name= 'create-story'),
+    path ('update-story/ <str:pk>/ ', views.updateStory, name= 'update-story'),
+    path ('delete-story/ <str:pk>/ ', views.deleteStory, name= 'delete-story'),
+    path ('delete-message/ <str:pk>/ ', views.deleteMessage, name= 'delete-message'),
+    path ('create-series', views.createSeries, name= 'create-series'),
+    path ('update-series/ <str:pk>/ ', views.updateSeries, name= 'update-series'),
+    path ('delete-series/ <str:pk>/ ', views.deleteSeries, name= 'delete-series'),
+    path ('create-episode', views.createEpisode, name= 'create-episode'),
+    path ('update-episode/ <str:pk>/ ', views.updateEpisode, name= 'update-episode'),
+    path ('delete-episode/ <str:pk>/ ', views.deleteEpisode, name= 'delete-episode'),
+
     
 ]

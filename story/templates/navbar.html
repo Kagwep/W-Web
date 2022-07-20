@@ -16,10 +16,38 @@
               <li class="nav-item">
                 <a class="nav-link text-primary fw-bold" href="#">About us</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-item nav-link" href="{% url 'create-room' %}"> Create new story </a>
-              </li>
         </ul>
+        <div class="mx-2 fw-bold">
+          <!-- Button trigger modal -->
+            <button class="btn btn-sm btn-outline-success btn-pill transition-3d-hover fw-bold px-2 p-2 mx-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Create new story
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content bg-light">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Select Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body  text-center">
+
+                    <div class="display-flex">
+                      <a class="btn  btn-outline-success transition-3d-hover fw-bold px-2 p-2 mx-5" href="{% url 'create-story' %}"> Single </a>
+                      <a class="btn  btn-outline-success transition-3d-hover fw-bold px-2 p-2 mx-5" href="{% url 'create-series' %}"> series </a>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        
         {% if request.user.is_authenticated %}
 
         <p> {{request.user}} </p>

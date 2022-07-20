@@ -106,7 +106,6 @@ class Mystory(models.Model):
     host = models.ForeignKey(UserReg,  on_delete= models.CASCADE , null= True)
     topic = models.ForeignKey(Topic,on_delete= models.CASCADE, null=True)
     title = models.CharField(max_length= 200)
-    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='participants', blank= True)
     description = models.TextField(null=True, blank =True)
     body = RichTextField()
     updated = models.DateTimeField(auto_now =True)

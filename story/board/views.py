@@ -86,11 +86,9 @@ def home(request):
     return render(request, 'board/home.html', context)
     
 def MyStory(request,pk):
-
     mystory = Mystory.objects.get(id = pk)
     mystory_comments = mystory.comment_set.all().order_by('-created') 
     participants = mystory.participants.all()
-
     if request.method == "POST":
         message = Comment.objects.create(
             user = request.user,
@@ -103,20 +101,36 @@ def MyStory(request,pk):
 
     return render(request, 'board/MyStorys.html', context)
 @login_required(login_url= 'login')
-def createRoom(request):
-    form = MystoryForm()
+def createStory(request):
+    categories = Topic.objects.all()
     if request.method == 'POST':
-        form = MystoryForm(request.POST)
+        storydata=request.POST
+        name_check = 'none'
 
-        if form.is_valid():
-            form.save()
+        if storydata['topic'] != name_check:
+            name = Topic.objects.get(id=storydata['topic'])
+        elif storydata['topic_new'] != ' ':
+            name,create = Topic.objects.get_or_create(
+                name = storydata['topic_new']
+            )
+        else:
+            name = None
+        story = Mystory.objects.create(
+            host = request.user,
+            topic = name,
+            title = storydata['titile'],
+            description = storydata['description'],
+            body = storydata['body']
 
-            return redirect('home')
+        )
 
-    context = {'form': form}
+        return redirect('home')
+    
+    context = {'categories':categories}
+
     return render(request, 'board/mystory.html', context )
 @login_required(login_url= 'login')
-def updateRoom(request, pk):
+def updateStory(request, pk):
     mystory = Mystory.objects.get(id=pk)
     form =MystoryForm(instance = mystory)
 
@@ -134,7 +148,7 @@ def updateRoom(request, pk):
     return render(request, 'board/mystory.html', context)
 
 @login_required(login_url= 'login')
-def deleteRoom(request, pk): 
+def deleteStory(request, pk): 
     mystory = Mystory.objects.get(id=pk)
 
     if request.user != mystory.host:
@@ -179,7 +193,7 @@ def createSeries(request):
         )
         return redirect('episode')
                 
-    return render(request, 'read-series.html')
+    return render(request, 'board/series.html')
 
 def updateSeries(request,pk):
     series = Series.objects.get(id=pk) 
